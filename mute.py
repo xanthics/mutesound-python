@@ -22,10 +22,12 @@ def main():
 		outpath = os.path.join(*(data[0].upper() + data[1:]).split('/'))
 		outfile = pathlib.Path(outpath)
 		outfile.parent.mkdir(exist_ok=True, parents=True)
-		song = AudioSegment.silent(duration=1)
+		song = AudioSegment.silent(duration=0)
 		song.export(outpath[:-3] + "wav", format="wav")
-		if outpath.endswith("ogg"):
-			song.export(outpath, format="ogg")
+		with open(outpath[:-3] + "ogg", 'w') as _:
+			pass
+#		if outpath.endswith("ogg"):
+#			song.export(outpath, format="ogg")
 	return
 
 if __name__ == '__main__':
