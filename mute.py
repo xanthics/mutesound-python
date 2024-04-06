@@ -29,7 +29,7 @@ def setup(sbarchive):
 
 def main():
 	with open("sounds.txt", "r") as f:
-		# allow user to comment files with `-``
+		# allow user to add comments to lines in sounds.txt with `,`
 		sounds = [x.split(",")[0].strip() for x in f.readlines()]
 	with open(TEMP_SOUND_LOOKUP, 'r') as f:
 		lookup = json.load(f)
