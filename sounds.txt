@@ -1,27 +1,51 @@
-FizzleFireA
-FizzleFrostA
-FizzleShadowA
-FizzleHolyA
-FizzleNatureA
-Rejuvenation
-NaruuLoopGood
-KodoBeastAttackA
-KodoBeastAttackB
-KodoBeastAttackC
-MurmurLoop
-FootstepsGiant01
-FootstepsGiant02
-FootstepsGiant03
-FootstepsGiant04
-FootstepsGiant05 
-ShootWandLaunchArcane
-ShootWandLaunchFire
-wandfirecast1
-wandfirecast2
-wandfirecast3
-ShootWandLaunchHoly
-ShootWandLaunchIce
-ShootWandLaunchNature
-ShootWandLaunchShadow
-ShootWandLaunchPoison
-ShootWandLaunchLightning
+1424, SpellFizzleFire
+1425, SpellFizzleFrost
+1426, SpellFizzleNature
+1427, SpellFizzleShadow
+1428, SpellFizzleHoly
+10846, SpellFizzle: Holy
+3229, Rejuvenation
+81870, Rejuvenation
+9832, NaruuGoodLoop
+772, KodoBeastAttack
+10823, MurmurLoop
+2546, FootstepsGiantAll
+5414, ShootWandLaunchArcane
+5415, ShootWandLaunchFire
+5416, ShootWandLaunchHoly
+5417, ShootWandLaunchIce
+5418, ShootWandLaunchNature
+5419, ShootWandLaunchShadow
+5434, ShootWandLaunchPoison
+5435, ShootWandLaunchLightning
+8756, BE_Campfire01
+9291, BE_Campfire02
+9138, BU_Smoke_Stack_01
+9037, BooksOnFire
+1569, CampFireLarge
+1518, CampFireNormal
+11848, BurntStoneTree01_VFX
+11849, BurntStoneTree01_VFX2
+11850, BurntStoneTree07_VFX
+11851, BurntStoneTree08_VFX
+6437, StratholmeFireSmokeEmberSLoop
+10739, Fel_StratholmeFireSmokeEmbers
+10755, StratholmeFireSmokeEmberM
+8976, Hellfire_FloorBraizer_Purple
+8978, Hellfire_FloorBraizer
+8964, Hellfire_Firewall_01
+4614, BlackSmithing
+1142, HerbalismSearch
+1143, Mining Impact
+3780, Skinning
+1204, PutDownGems
+9439, TripodAttack
+9440, TripodWound
+9441, TripodWoundCrit
+9442, TripodDeath
+9443, TripodPreAggro
+9444, TripodPreAggro
+9445, TripodAggro
+124, LEVELUPSOUND
+888, LEVELUP
+1440, LevelUp

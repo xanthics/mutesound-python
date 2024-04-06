@@ -4,34 +4,55 @@
 #
 
 import pathlib
-import os.path
-import requests
+import os
+import json
 from pydub import AudioSegment
+
+import gzip
+import shutil
+
+TEMP_SOUND_LOOKUP = 'lookup_sb_zan.json'
+
+def setup(sbarchive):
+	# decompress our lookup table
+	with gzip.open(sbarchive, 'rb') as f_in:
+		with open(TEMP_SOUND_LOOKUP, 'wb') as f_out:
+			shutil.copyfileobj(f_in, f_out)
+	# remove any existing sound blanking
+	if pathlib.Path('sound').is_dir():
+		for result in os.listdir("sound"):
+			tpath = os.path.join("sound", result)
+			if pathlib.Path(tpath).is_file():
+				os.remove(tpath)
+			else:
+				shutil.rmtree(tpath)
 
 def main():
 	with open("sounds.txt", "r") as f:
-		sounds = [x.strip() for x in f.readlines()]
-	header = {
-		'User-Agent': 'mutesound',
-	}
-	requester = requests.Session()
+		# allow user to comment files with `-``
+		sounds = [x.split(",")[0].strip() for x in f.readlines()]
+	with open(TEMP_SOUND_LOOKUP, 'r') as f:
+		lookup = json.load(f)
+
 	for c, snd in enumerate(sounds, start=1):
-		print(f"Requesting: {snd} ({c} of {len(sounds)})")
-		url = f'https://wow.tools/files/scripts/api.php?draw=38&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=false&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=false&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=false&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=asc&start=0&length=25&search%5Bvalue%5D=${snd}%2Ctype%3Aogg&search%5Bregex%5D=false&_=1695962035525'
-		req = requester.get(url, headers=header)
-		for obj in req.json()['data']:
-			data = obj[1]
-			outpath = os.path.join(*(data[0].upper() + data[1:]).split('/'))
+		print(f"Handling: {snd} ({c} of {len(sounds)})")
+		for obj in lookup['data'][snd]:
+			print(f"creating {lookup['lookup'][obj[0]]}/{obj[1]}")
+			outpath = os.path.join(lookup['lookup'][obj[0]], obj[1])
 			outfile = pathlib.Path(outpath)
 			outfile.parent.mkdir(exist_ok=True, parents=True)
 			song = AudioSegment.silent(duration=0)
-			song.export(outpath[:-3] + "wav", format="wav")
-			with open(outpath[:-3] + "ogg", 'w') as _:
+			song.export(outpath + ".wav", format="wav")
+			with open(outpath + ".ogg", 'w') as _:
 				pass
 	return
 
 if __name__ == '__main__':
-	if pathlib.Path("sounds.txt").is_file():
+	if pathlib.Path('parsed_sounds.gz').is_file() and pathlib.Path("sounds.txt").is_file():
+		setup('parsed_sounds.gz')
 		main()
+		# remove the descompressed file since we don't need it anymore
+		os.remove(TEMP_SOUND_LOOKUP)
 	else:
-		print("'sounds.txt' not found, exiting.")
+		print("'sounds.txt' or 'parsed_sounds.gz not found, exiting.")
+		exit()
