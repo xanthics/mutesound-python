@@ -1,7 +1,6 @@
 import json
 import os
 import gzip
-import shutil
 
 def main():
 	# extract this file from patch-M
@@ -25,16 +24,8 @@ def main():
 					newdata["data"][val['ID']] = []
 				newdata["data"][val['ID']].append([id, base])
 
-	with open("parsed_sounds.json", "w") as f:
-		json.dump(newdata, f)
-
-	with open('parsed_sounds.json', 'rb') as f_in:
-		with open('parsed_sounds.gz', 'wb') as f_out:
-			with gzip.GzipFile('parsed_sounds.json', 'wb', fileobj=f_out) as f_out:
-				shutil.copyfileobj(f_in, f_out)
-
-	# cleanup
-	os.remove('parsed_sounds.json')
+	with gzip.open('parsed_sounds.json.gz', 'wt', encoding='UTF-8') as ofile:
+		json.dump(newdata, ofile)
 
 if __name__ == "__main__":
 	main()

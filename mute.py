@@ -14,10 +14,6 @@ import shutil
 TEMP_SOUND_LOOKUP = 'lookup_sb_zan.json'
 
 def setup(sbarchive):
-	# decompress our lookup table
-	with gzip.open(sbarchive, 'rb') as f_in:
-		with open(TEMP_SOUND_LOOKUP, 'wb') as f_out:
-			shutil.copyfileobj(f_in, f_out)
 	# remove any existing sound blanking
 	if pathlib.Path('sound').is_dir():
 		for result in os.listdir("sound"):
@@ -27,12 +23,14 @@ def setup(sbarchive):
 			else:
 				shutil.rmtree(tpath)
 
-def main():
+	# decompress and return our lookup table
+	with gzip.open('parsed_sounds.json.gz', 'rt', encoding='UTF-8') as data:
+		return json.load(data)
+
+def main(lookup):
 	with open("sounds.txt", "r") as f:
 		# allow user to add comments to lines in sounds.txt with `,`
-		sounds = [x.split(",")[0].strip() for x in f.readlines()]
-	with open(TEMP_SOUND_LOOKUP, 'r') as f:
-		lookup = json.load(f)
+		sounds = [x.split(",", 1)[0].strip() for x in f.readlines()]
 
 	for c, snd in enumerate(sounds, start=1):
 		print(f"Handling: {snd} ({c} of {len(sounds)})")
@@ -48,11 +46,9 @@ def main():
 	return
 
 if __name__ == '__main__':
-	if pathlib.Path('parsed_sounds.gz').is_file() and pathlib.Path("sounds.txt").is_file():
-		setup('parsed_sounds.gz')
-		main()
-		# remove the descompressed file since we don't need it anymore
-		os.remove(TEMP_SOUND_LOOKUP)
+	if pathlib.Path('parsed_sounds.json.gz').is_file() and pathlib.Path("sounds.txt").is_file():
+		lookup = setup('parsed_sounds.gz')
+		main(lookup)
 	else:
-		print("'sounds.txt' or 'parsed_sounds.gz not found, exiting.")
+		print("'sounds.txt' or 'parsed_sounds.json.gz not found, exiting.")
 		exit()
