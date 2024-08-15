@@ -49,3 +49,5 @@
 124, LEVELUPSOUND
 888, LEVELUP
 1440, LevelUp
+4069, Feral Spirits and other wolves
+4121, Zulian Guardians and other cats
