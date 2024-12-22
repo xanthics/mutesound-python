@@ -51,3 +51,6 @@
 1440, LevelUp
 4069, Feral Spirits and other wolves
 4121, Zulian Guardians and other cats
+4072, Slimesabers
+13021, stormborn
+81627,  OG9 travel guide
