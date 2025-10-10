@@ -1,3 +1,5 @@
+## This project can no longer be updated as Ascension removed the listfiles from their MPQs
+
 Python version of https://github.com/mattibalize-lab/MuteSounds
 
 See that repo for install instructions.  The created `sound` folder should go in your `Ascension Launcher/resources/client/Data/enUS/` directory.
