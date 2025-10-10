@@ -51,4 +51,4 @@ if __name__ == '__main__':
 		main(lookup)
 	else:
 		print("'sounds.txt' or 'parsed_sounds.json.gz not found, exiting.")
-		exit()
+	exit()
