@@ -28,22 +28,26 @@ def setup(sbarchive):
 		return json.load(data)
 
 def main(lookup):
+	missing = []
 	with open("sounds.txt", "r") as f:
 		# allow user to add comments to lines in sounds.txt with `,`
 		sounds = [x.split(",", 1)[0].strip() for x in f.readlines()]
 
 	for c, snd in enumerate(sounds, start=1):
 		print(f"Handling: {snd} ({c} of {len(sounds)})")
-		for obj in lookup['data'][snd]:
-			print(f"creating {lookup['lookup'][obj[0]]}/{obj[1]}")
-			outpath = os.path.join(lookup['lookup'][obj[0]], obj[1])
-			outfile = pathlib.Path(outpath)
-			outfile.parent.mkdir(exist_ok=True, parents=True)
-			song = AudioSegment.silent(duration=0)
-			song.export(outpath + ".wav", format="wav")
-			with open(outpath + ".ogg", 'w') as _:
-				pass
-	return
+		if snd in lookup['data']:
+			for obj in lookup['data'][snd]:
+				print(f"creating {lookup['lookup'][obj[0]]}/{obj[1]}")
+				outpath = os.path.join(lookup['lookup'][obj[0]], obj[1])
+				outfile = pathlib.Path(outpath)
+				outfile.parent.mkdir(exist_ok=True, parents=True)
+				song = AudioSegment.silent(duration=0)
+				song.export(outpath + ".wav", format="wav")
+				with open(outpath + ".ogg", 'w') as _:
+					pass
+		else:
+			missing.append(snd)
+	print(f"missing sounds with ids: {missing}")
 
 if __name__ == '__main__':
 	if pathlib.Path('parsed_sounds.json.gz').is_file() and pathlib.Path("sounds.txt").is_file():
